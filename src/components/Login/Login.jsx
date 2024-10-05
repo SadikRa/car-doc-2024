@@ -1,30 +1,39 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import img from '../../assets/images/login/login.svg'
-// import { useContext } from 'react';
-// import { AuthContext } from '../../providers/AuthProviders';
+import { useContext } from 'react';
+import { AuthContext } from '../providers/AuthProvider';
+import Swal from 'sweetalert2';
 // import SocalLogger from '../Shared/SocalLogger/SocalLogger';
 const Login = () => {
 
-//   const {signIn} = useContext(AuthContext)
-//   const location = useLocation();
-//   const navigate = useNavigate()
-//   const from = location.state?.from?.pathname || '/'
+  const {signIn} = useContext(AuthContext)
+  const location = useLocation();
+  const navigate = useNavigate()
+  const from = location.state?.from?.pathname || '/'
 
     const handleLogin = event =>{
         event.preventDefault()
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
-        // signIn(email, password)
-        // .then(result =>{
-        //   const User = result.user;
+        signIn(email, password)
+        .then(result =>{
+          const User = result.user;
 
-        //   console.log(User)
-        //   navigate(from, {replace: true})
+          if(User){
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your work has been saved",
+                showConfirmButton: false,
+                timer: 1500
+              });
+          }
+          navigate(from, {replace: true})
 
           
-        // })
-        // .catch(error => console.log(error))
+        })
+        .catch(error => console.log(error))
     }
 
     return (
@@ -57,7 +66,7 @@ const Login = () => {
           <input className="btn btn-primary" type="submit" value="Login" />
         </div>
         </form>
-        <p>New to car doctor <Link className='font-bold text-orange-600' to='/signup'>Sign Up</Link></p>
+        <p>New to car doctor <Link className='font-bold text-orange-600' to='/register'>Register</Link></p>
       </div>
       {/* <SocalLogger></SocalLogger> */}
     </div>
