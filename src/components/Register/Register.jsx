@@ -14,19 +14,35 @@ const Register = () => {
         const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(name, email, password)
+         const userData = {name, email, password}
         createUser(email, password)
         .then(result =>{
           const loaderUser = result.user;
+
           console.log(loaderUser)
           if(loaderUser){
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Your work has been saved",
-                showConfirmButton: false,
-                timer: 1500
-              });
+
+            fetch('http://localhost:5000/car',{
+                method: 'POST',
+                headers: {
+                    'content-type' : 'application/json'
+                },
+                body: JSON.stringify(userData)
+              } )
+              .then(res => res.json())
+              .then(data => {
+                console.log(data)
+                if(data) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Your work has been saved",
+                        showConfirmButton: false,
+                        timer: 1500
+                      });
+                }
+              })
+
           }
         })
         .catch(error => console.log(error))
